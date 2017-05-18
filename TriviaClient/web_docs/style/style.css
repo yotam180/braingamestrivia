@@ -33,6 +33,9 @@ body {
 #roomDiv {
     background-color: mediumpurple;
 }
+#gameDiv {
+    background-color: black;
+}
 #signupDiv {
     text-align: center;
     padding-top: 20px;
@@ -89,6 +92,9 @@ body {
 }
 #btnCloseRoom {
     left: 20%;
+}
+#btnStartGame {
+    left: 40%;
 }
 .bigText {
     font-size: large;

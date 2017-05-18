@@ -81,6 +81,7 @@
     <div id="roomDiv" style="display: none;" class="full">
         <input type="button" id="btnLeaveRoomLink" value="Exit room" class="bigButton bottomButton" style="background-color: orangered; height: 10%; width: 20%;">
         <input type="button" id="btnCloseRoom" value="Close room" class="bigButton bottomButton" style="background-color: orangered; height: 10%; width: 20%;">
+        <input type="button" id="btnStartGame" value="Start Game" class="bigButton bottomButton" style="background-color: rebeccapurple; height: 10%; width: 40%;">
         <div style="width: 100%; text-align: center; color: aqua;">
             <h2 id="statusH">Waiting...</h2>
         </div>
@@ -106,6 +107,9 @@
                 <option value='hard'>Hard</option>
             </select>
         </div>
+    </div>
+    <div id="gameDiv" class="full" style="display: none">
+        Hello world.
     </div>
     <div id="failedConnectionDiv" style="display: none;" class="full">
         <h2>Connection to the server has ended.</h2>

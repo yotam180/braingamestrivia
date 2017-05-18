@@ -79,6 +79,10 @@ $(document).ready(function() {
         $("#mainDiv").show();
         $("#roomDiv").hide();
         alertify.alert("Room closed", "The room was closed by the administrator.");
+    })
+    .handler(1170, function() {
+        $("#roomDiv").fadeOut();
+        $("#gameDiv").fadeIn();
     });
 
     window.scanner = scanner;
@@ -268,6 +272,10 @@ $(document).ready(function() {
 
     $("#btnCloseRoom").click(function() {
         scanner.send(215);
+    });
+
+    $("#btnStartRoom").click(function() {
+        scanner.send(217);
     });
 });
 
