@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="Stylesheet" type="text/css" href="style/style.css" />
+    <link rel="icon" href="asset/Rubik-Cube.ico" type="image/x-icon"/>
+    <script src="js/jquery.js"></script>
+    <script src="js/Scanner.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/loadify.js"></script>
+    <script src="js/main.js"></script>
+    <audio src="asset/lobby.mp3" id="lobbyMusic" autoplay="true" loop="true"></audio>
+    <title>BrainGames Trivia</title>
+</head>
+<body>
+    <div id="mobileTester" style="width: 0; height: 0; position: fixed;"></div>
+    <div id="loadingDiv" class="full" style="background-color: lightgreen; text-align: center; margin: auto;">
+        <img src="asset/animal.gif" style="width: 50%;"/>
+    </div>
+    <div id="loginDiv" style="display: none;" class="full" style="background-color: lightgreen">
+        <img src="asset/Logo.png" style="height: 30%"><br/>
+        <input type="text" id="txtUsername" placeholder="Username" class="bigText" />
+        <br/><br/>
+        <input type="password" id="txtPassword" placeholder="Password" class="bigText" />
+        <br/><br/>
+        <p id="lblError" style="color: red; font-family: Arial; background-color: white;"></p>
+        <input type="button" id="btnLogin" value="Sign in" class="bigButton" style="background-color: aquamarine;">
+        <br/>Or:<br/>
+        <input type="button" id="btnSignupLink" value="Sign up" class="bigButton" style="background-color: aquamarine;">
+    </div>
+    <div id="signupDiv" style="display: none;" class="full">
+        <img src="asset/Logo.png" style="height: 30%"><br/>
+        <input type="text" id="txtUsernameSignup" placeholder="Username" class="bigText" />
+        <br/><br/>
+        <input type="password" id="txtPasswordSignup" placeholder="Password" class="bigText" />
+        <br/><br/>
+        <input type="password" id="txtPasswordConfirmSignup" placeholder="Password confirmation" class="bigText" />
+        <br/><br/>
+        <input type="email" id="txtEmailSignup" placeholder="Email" class="bigText" />
+        <br/><br/>
+        <p id="lblErrorSignup" style="color: red; font-family: Arial; background-color: white;"></p>
+        <input type="button" id="btnSignup" value="Sign up" class="bigButton" style="background-color: aquamarine;">
+        <br/>Or:<br/>
+        <input type="button" id="btnLoginLink" value="Sign in" class="bigButton" style="background-color: aquamarine;">
+    </div>
+    <div id="mainDiv" style="display: none;" class="full">
+        <div id="roomlistDiv">
+
+        </div>
+        <div id="playerlistDiv">
+            <div style="width: 100%; margin: auto; text-align: center;">
+                <h2 style="color: white; font-family: cursive;">Connected players:</h2>
+            </div>
+        </div>
+        <input type="button" id="btnCreateRoomLink" value="New Room" class="bigButton bottomButton" style="background-color: aquamarine; height: 10%; width: 20%;">
+    </div>
+    <div id="createroomDiv" style="display: none;" class="full">
+        <input type="text" id="txtRoomName" placeholder="Room name" class="bigText" />
+        <br/><br/>
+        <input type="number" id="numPlayers" placeholder="Max. Players (default 4)" class="bigText" />
+        <br/><br/>
+        <input type="number" id="numRounds" placeholder="Rounds (default 6)" class="bigText" />
+        <br/><br/>
+        <input type="number" id="numRoundTime" placeholder="Round time (default 10sec)" class="bigText" />
+        <br/><br/>
+        <b>Category: </b><select id="selCategory" class="bigText">
+            <option>Hello</option>
+        </select>
+        <br/><br/>
+        <b>Difficulty: </b><select id="selDifficulty" class="bigText">
+            <option value='easy'>Easy</option>
+            <option value='medium'>Medium</option>
+            <option value='hard'>Hard</option>
+        </select>
+        <p id="lblErrorCreation" style="color: red; font-family: Arial; background-color: white;"></p>
+        <input type="button" id="btnCreateRoom" value="Create room" class="bigButton" style="background-color: aquamarine;">
+        &nbsp;Or&nbsp;
+        <input type="button" id="btnCancalRoomCreation" value="Cancel" class="bigButton" style="background-color: aquamarine;">
+    </div>
+    <div id="roomDiv" style="display: none;" class="full">
+        <input type="button" id="btnLeaveRoomLink" value="Exit room" class="bigButton bottomButton" style="background-color: orangered; height: 10%; width: 20%;">
+        <input type="button" id="btnCloseRoom" value="Close room" class="bigButton bottomButton" style="background-color: orangered; height: 10%; width: 20%;">
+        <div style="width: 100%; text-align: center; color: aqua;">
+            <h2 id="statusH">Waiting...</h2>
+        </div>
+        <div id="chatDiv">
+            &nbsp;
+        </div>
+        <div id="roomplayersDiv">
+            &nbsp;
+        </div>
+        <div id="settingSetDiv">
+            <b>Max players: </b>
+            <input type="number" id="numPlayersChange" placeholder="Max. Players (default 4)" class="bigText autoupdate" />
+            <br/><b>Rounds: </b>
+            <input type="number" id="numRoundsChange" placeholder="Rounds (default 6)" class="bigText autoupdate" />
+            <br/><b>Time per round: </b>
+            <input type="number" id="numRoundTimeChange" placeholder="Round time (default 10sec)" class="bigText autoupdate" />
+            <br/>
+            <b>Category: </b><br/><select id="selCategoryChange" class="bigText autoupdate"></select>
+            <br/>
+            <b>Difficulty: </b><br/><select id="selDifficultyChange" class="bigText autoupdate">
+                <option value='easy'>Easy</option>
+                <option value='medium'>Medium</option>
+                <option value='hard'>Hard</option>
+            </select>
+        </div>
+    </div>
+    <div id="failedConnectionDiv" style="display: none;" class="full">
+        <h2>Connection to the server has ended.</h2>
+        <img src="asset/sad-kitty.jpg" style="height: 50%;"/>
+    </div>
+</body>
+</html>

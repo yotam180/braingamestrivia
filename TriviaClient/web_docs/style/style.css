@@ -1,0 +1,148 @@
+.full {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+}
+body {
+    margin: 0;
+    font-family: cursive;
+}
+#loginDiv {
+    text-align: center;
+    padding-top: 20px;
+    -webkit-animation-name: colorchange;
+    -webkit-animation-duration: 30s;
+    animation-name: colorchange;
+    animation-duration: 30s;
+    animation-iteration-count: 100;
+    background-color: lightgreen;
+}
+#failedConnectionDiv {
+    text-align: center;
+    padding-top: 20px;
+    -webkit-animation-name: colorchange;
+    -webkit-animation-duration: 30s;
+    animation-name: colorchange;
+    animation-duration: 30s;
+    animation-iteration-count: 100;
+    background-color: lightgreen;
+}
+#mainDiv {
+    background-color: dodgerblue;
+}
+#roomDiv {
+    background-color: mediumpurple;
+}
+#signupDiv {
+    text-align: center;
+    padding-top: 20px;
+    background-color: springgreen;
+}
+#createroomDiv {
+    text-align: center;
+    padding-top: 20px;
+    background-color: lightpink;
+}
+#roomlistDiv {
+    background-color: lightcyan;
+    top: 0;
+    left: 0;
+    width: 80%;
+    height: 90%;
+    position: fixed;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+#roomplayersDiv {
+    background-color: palegoldenrod;
+    top: 10%;
+    left: 20%;
+    width: 60%;
+    height: 80%;
+    position: fixed;
+}
+#settingSetDiv {
+    background-color: whitesmoke;
+    top: 10%;
+    right: 0;
+    width: 20%;
+    height: 80%;
+    position: fixed;
+    text-align: center;
+}
+#chatDiv {
+    background-color: whitesmoke;
+    top: 10%;
+    left: 0;
+    width: 20%;
+    height: 80%;
+    position: fixed;
+}
+#playerlistDiv {
+    background-color: darkblue;
+    top: 0;
+    right: 0;
+    width: 20%;
+    height: 90%;
+    position: fixed;
+    color: yellowgreen;
+}
+#btnCloseRoom {
+    left: 20%;
+}
+.bigText {
+    font-size: large;
+    border-radius: 15px;
+    outline: none;
+    padding: 10px;
+    text-align: center;
+}
+.bigButton {
+    font-size: large;
+    border-radius: 15px;
+    outline: none;
+    padding: 10px;
+    text-align: center;
+}
+.bottomButton {
+    position: fixed;
+    bottom: 0;
+    white-space: normal;
+}
+.enabled_room {
+    background-color: palegreen;
+    color: black;
+    cursor: pointer;
+}
+.disabled_room {
+    background-color: gray;
+    color: #333;
+    font-family: 'Times New Roman', Times, serif;
+    cursor: not-allowed;
+}
+
+
+@keyframes colorchange {
+    0% {
+        background-color: lightgreen;
+    }
+    20% {
+        background-color: yellow;
+    }
+    40% {
+        background-color: indianred;
+    }
+    60% {
+        background-color: cornflowerblue;
+    }
+    80% {
+        background-color: blueviolet;
+    }
+    100% {
+        background-color: lightgreen;
+    }
+}
+
+@media only screen and (max-width: 760px) {
+  #mobileTester { display: none; }
+}
