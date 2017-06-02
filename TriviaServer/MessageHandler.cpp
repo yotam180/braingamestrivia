@@ -14,12 +14,106 @@ long long time()
 {
 	return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }
+int getScore4Question(long long start, long long anstime, int questionTime)
+{
+	int interval = (anstime - start) / 1000;
+	return (questionTime - interval) * 10 / questionTime;
+}
 
 void MessageHandler::handle()
 {
 	long long lastBroadcast = time();
 	while (_active)
 	{
+		///
+		///	TIMED TASKS HANDLING
+		///
+		for (int i = 0; i < tasks.size(); i++)
+		{
+			TimedTask& task = tasks[i];
+			if (task.timeout < time())
+			{
+				if (task.type == TimedTask::START_GAME)
+				{
+					room* r = (room*)task.param;
+					if (r == nullptr) goto ABORT_TASK;
+					r->currentRound = 0;
+					r->answerers = 0;
+					r->gamestate = GameRoom::IN_QUESTION;
+					r->questions[r->currentRound].time = time();
+					for (int i = 0; i < r->users.size(); i++)
+					{
+						r->users[i]->last_answer = 0;
+						r->users[i]->getScanner()->writeInt(Message::BROADCAST_NEW_QUESTION);
+						r->users[i]->getScanner()->writeStr(r->questions[r->currentRound].question);
+						r->users[i]->getScanner()->writeStr(r->questions[r->currentRound].ans1);
+						r->users[i]->getScanner()->writeStr(r->questions[r->currentRound].ans2);
+						r->users[i]->getScanner()->writeStr(r->questions[r->currentRound].ans3);
+						r->users[i]->getScanner()->writeStr(r->questions[r->currentRound].ans4);
+					}
+					tasks.push_back(TimedTask(time() + r->timePerQuestion * 1000, TimedTask::END_QUESTION, r));
+				}
+				if (task.type == TimedTask::END_QUESTION)
+				{
+					room* r = (room*)task.param;
+					if (r == nullptr) goto ABORT_TASK;
+					r->gamestate = GameRoom::IN_ANSWERS;
+					// Give scores & shit like this
+					for (int i = 0; i < r->users.size(); i++)
+					{
+						r->users[i]->last_answer = 0;
+						r->users[i]->getScanner()->writeInt(Message::BROADCAST_QUESTION_ENDED);
+						r->users[i]->getScanner()->writeInt(r->questions[r->currentRound].correctAnswer);
+					}
+					if (r->currentRound < r->maxRounds - 1)
+					{
+						tasks.push_back(TimedTask(time() + 5000, TimedTask::END_ANSWERS, r));
+					}
+					else
+					{
+						tasks.push_back(TimedTask(time() + 5000, TimedTask::END_GAME, r));
+					}
+				}
+				if (task.type == TimedTask::END_ANSWERS)
+				{
+					room* r = (room*)task.param;
+					if (r == nullptr) goto ABORT_TASK;
+					r->currentRound++;
+					r->answerers = 0;
+					r->gamestate = GameRoom::IN_QUESTION;
+					r->questions[r->currentRound].time = time();
+					for (int i = 0; i < r->users.size(); i++)
+					{
+						r->users[i]->last_answer = 0;
+						r->users[i]->getScanner()->writeInt(Message::BROADCAST_NEW_QUESTION);
+						r->users[i]->getScanner()->writeStr(r->questions[r->currentRound].question);
+						r->users[i]->getScanner()->writeStr(r->questions[r->currentRound].ans1);
+						r->users[i]->getScanner()->writeStr(r->questions[r->currentRound].ans2);
+						r->users[i]->getScanner()->writeStr(r->questions[r->currentRound].ans3);
+						r->users[i]->getScanner()->writeStr(r->questions[r->currentRound].ans4);
+					}
+					tasks.push_back(TimedTask(time() + r->timePerQuestion * 1000, TimedTask::END_QUESTION, r));
+				}
+				if (task.type == TimedTask::END_GAME)
+				{
+					// What the heck should I do here?
+					room* r = (room*)task.param;
+					if (r == nullptr) goto ABORT_TASK;
+					for (int i = 0; i < r->users.size(); i++)
+					{
+						r->users[i]->getScanner()->writeInt(Message::BROADCAST_GAME_ENDED);
+					}
+				}
+				ABORT_TASK:
+				tasks.erase(tasks.begin() + i);
+				i--;
+			}
+		}
+
+
+		///
+		///	BROADCASTING
+		///
 		if (time() - lastBroadcast > 1500)
 		{
 			lastBroadcast = time();
@@ -67,6 +161,11 @@ void MessageHandler::handle()
 		{
 			return;
 		}
+
+
+		///
+		///	MESSAGE QUEUE HANDLING
+		///
 		unique_lock<mutex> l(m);
 		Message msg = messageQueue.front();
 		messageQueue.pop();
@@ -107,6 +206,7 @@ void MessageHandler::handle()
 					break;
 				}
 			}
+			msg.getScanner()->close();
 		}
 		if (msg.getType() == Message::REQUEST_CREATE_ROOM)
 		{
@@ -191,7 +291,7 @@ void MessageHandler::handle()
 			int roomid = scanner.nextInt();
 			room* r = getRoom(roomid);
 			User* user = getUser(&scanner);
-			if (r == nullptr || user == nullptr || user->getRoom() != nullptr)
+			if (r == nullptr || user == nullptr || user->getRoom() != nullptr || r->gamestate != GameRoom::WAITING)
 			{
 				scanner.writeInt(Message::RESPONSE_ROOM_JOIN_ERROR);
 			}
@@ -219,16 +319,61 @@ void MessageHandler::handle()
 		{
 			User* u = getUser(&scanner);
 			room* r = u->getRoom();
-			if (r == nullptr || r->users.size() < 2)
+			if (r == nullptr || r->users.size() < 1 || r->users[0] != u)
 			{
 				scanner.writeInt(Message::RESPONSE_GAMESTART_TOO_FEW_PLAYERS);
 				goto RET;
 			}
-			scanner.writeInt(Message::BROADCAST_GAME_STARTING);
+			
+			r->questions = Database::instance()->getQuestions(r->maxRounds, r->difficulty, r->category);
+			r->gamestate = GameRoom::STARTING_GAME;
+			r->formers.clear();
+			
+			for (int i = 0; i < r->users.size(); i++)
+			{
+				r->users[i]->score = 0;
+				r->users[i]->last_answer = 0;
+				r->users[i]->getScanner()->writeInt(Message::BROADCAST_GAME_STARTING);
+			}
+			tasks.push_back(TimedTask(time() + 5000, TimedTask::START_GAME, r));
 		}
+		if (msg.getType() == Message::REQUEST_ANSWER)
+		{
+			int answer = msg.getScanner()->nextInt();
+			User* u = getUser(msg.getScanner());
+			if (u->last_answer) 
+			{
+				goto RET;
+			}
+			room* r = u->getRoom();
+			u->last_answer = answer;
+			if (r->questions[r->currentRound].correctAnswer == answer) 
+			{
+				u->incScore(getScore4Question(r->questions[r->currentRound].time, time(), r->timePerQuestion));
+				msg.getScanner()->writeInt(Message::RESPONSE_ANSWER_CORRECT);
+				msg.getScanner()->writeInt(u->getScore());
+			}
+			else
+			{
+				msg.getScanner()->writeInt(Message::RESPONSE_ANSWER_WRONG);
+			}
+			r->answerers++;
+			for (int i = 0; i < r->users.size(); i++) {
+				r->users[i]->getScanner()->writeInt(Message::BROADCAST_QUESTION_STATUS);
+				r->users[i]->getScanner()->writeInt(r->answerers);
+				r->users[i]->getScanner()->writeInt(r->users.size());
+			}
+		}
+
 		RET:
-		
-		if (msg.getType() != Message::REQUEST_LEAVE_APPLICATION) scanner.release();
+		if (msg.getType() != Message::REQUEST_LEAVE_APPLICATION)
+		{
+
+			//getUser(msg.getScanner())->getRoom()
+			scanner.release();
+			
+		}
+		else delete msg.getScanner();
 	}
 }
 

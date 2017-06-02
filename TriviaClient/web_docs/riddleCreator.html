@@ -1,0 +1,27 @@
+<html>
+<head>
+<script>
+var res = [];
+window.addWord = function() {
+	var word = {
+		word: document.getElementById("txtWord").value,
+		binyan: document.getElementById("binyan").value.split(","),
+		shoresh: document.getElementById("shoresh").value.split(","),
+		gzarot: document.getElementById("gizra").value.split(","),
+	};
+	res.push(word);
+	document.getElementById("result").innerHTML = JSON.stringify(res);
+};
+</script>
+</head>
+<body>
+word <input type="text" id="txtWord" style="width: 100%;"/><br/>
+binyan <input type="text" id="binyan"style="width: 100%;"><br/>
+shoresh <input type="text" id="shoresh" style="width: 100%;"><br/>
+gizra <input type="text" id="gizra" style="width: 100%;"><br/>
+<button onclick="addWord()" value="create">create</button>
+<pre id="result" style="width: 50% word-wrap: break-word;">
+
+</pre>
+</body>
+</html>

@@ -1,3 +1,26 @@
+<@@@
+using System.Net;
+using System.Net.Sockets;
+@><@@
+static string GetLocalIPAddress()
+{
+    string localIP;
+    using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
+    {
+        socket.Connect("8.8.8.8", 65530);
+        IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
+        localIP = endPoint.Address.ToString();
+    }
+    return localIP;
+}
+@><@
+////////////////////////////////////////
+bool PRODUCTION = false; /////////////// CHECK ONLY WHEN DEPLOYED
+string IP = "127.0.0.1"; ///////////////
+////////////////////////////////////////
+var _ip = PRODUCTION ? IP : GetLocalIPAddress();
+@>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,8 +32,12 @@
     <script src="js/Scanner.js"></script>
     <script src="js/util.js"></script>
     <script src="js/loadify.js"></script>
-    <script src="js/main.js"></script>
+    <script>
+    <%include js/main.js%>
+    </script>
     <audio src="asset/lobby.mp3" id="lobbyMusic" autoplay="true" loop="true"></audio>
+    <audio src="asset/correct.mp3" id="soundCorrect"></audio>
+    <audio src="asset/wrong.mp3" id="soundWrong"></audio>
     <title>BrainGames Trivia</title>
 </head>
 <body>
@@ -50,7 +77,7 @@
         </div>
         <div id="playerlistDiv">
             <div style="width: 100%; margin: auto; text-align: center;">
-                <h2 style="color: white; font-family: cursive;">Connected players:</h2>
+                <h2 style="color: white; font-family: Arial;">Connected players:</h2>
             </div>
         </div>
         <input type="button" id="btnCreateRoomLink" value="New Room" class="bigButton bottomButton" style="background-color: aquamarine; height: 10%; width: 20%;">
@@ -108,8 +135,17 @@
             </select>
         </div>
     </div>
-    <div id="gameDiv" class="full" style="display: none">
-        Hello world.
+    <div id="gameDiv" class="full" style="display: none; text-align: center;">
+        <div id="questionDiv" style="display: none;">
+        <h2 id="lblQuestion" style="color: whitesmoke">This is the question placeholder</h2>
+        <button class="btnAnswer bigButton ansButton" answer="1" value="This is answer 1"></button><br/>
+        <button class="btnAnswer bigButton ansButton" answer="2" value="This is answer 2"></button><br/>
+        <button class="btnAnswer bigButton ansButton" answer="3" value="This is answer 3"></button><br/>
+        <button class="btnAnswer bigButton ansButton" answer="4" value="This is answer 4"></button>
+        </div>
+        <div id="answersDiv" style="display: none;">
+            <h1>Here will come the answers.</h1>
+        </div>
     </div>
     <div id="failedConnectionDiv" style="display: none;" class="full">
         <h2>Connection to the server has ended.</h2>

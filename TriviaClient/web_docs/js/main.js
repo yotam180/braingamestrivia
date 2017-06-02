@@ -1,6 +1,15 @@
 LoadFiles();
+
 $(document).ready(function() {
-    var scanner = new Scanner("192.168.10.168", 54453).loading($("#loadingDiv")).ready($("#loginDiv"))
+    var score = 0;
+    var game = {
+        players: 0,
+        rounds: 0,
+        round_time: 0,
+        category: 0,
+        difficulty: ""
+    };
+    var scanner = new Scanner("<@echo(_ip);@>", 54453).loading($("#loadingDiv")).ready($("#loginDiv"))
     .handler(106, function() {
         scanner.expect(1, function(data) {
             if (!data[0]) return;
@@ -61,10 +70,15 @@ $(document).ready(function() {
                 $("#btnCloseRoom").prop('disabled',true);
             }
             $("#numPlayersChange").val(data[3]);
+            game.players = data[3];
             $("#numRoundsChange").val(data[4]);
+            game.rounds = data[4];
             $("#numRoundTimeChange").val(data[5]);
+            game.round_time = data[5];
             $("#selDifficultyChange").val(data[2]);//.text(data[2]);
+            game.difficulty = data[2];
             $("#selCategoryChange").val(data[1]);//.text(categories[data[1]]);
+            game.category = data[1];
             scanner.expect(data[6], function(users) {
                 var u = "<table style='width: 100%;' border='1'>";
                 for (var x = 0; x < users.length; x++) {
@@ -83,6 +97,33 @@ $(document).ready(function() {
     .handler(1170, function() {
         $("#roomDiv").fadeOut();
         $("#gameDiv").fadeIn();
+        score = 0;
+    })
+    .handler(118, function() {
+        $("#questionDiv").show();
+        scanner.expect(5, function(data) {
+            console.log(data);
+            $(".btnAnswer[answer='1']").css({backgroundColor: "white"}).text(data[1].toString().htmlDecode());
+            $(".btnAnswer[answer='2']").css({backgroundColor: "white"}).text(data[2].toString().htmlDecode());
+            $(".btnAnswer[answer='3']").css({backgroundColor: "white"}).text(data[3].toString().htmlDecode());
+            $(".btnAnswer[answer='4']").css({backgroundColor: "white"}).text(data[4].toString().htmlDecode());
+            $("#lblQuestion").text(data[0].toString().htmlDecode());
+        });
+    })
+    .handler(130, function() {
+        scanner.expect(1, function(d) {
+            $(".btnAnswer[answer='" + d[0] + "']").css({backgroundColor: "green"});
+            setTimeout(function() {
+                $("#questionDiv").hide();
+                $("#answersDiv").fadeIn();
+            }, 1000);
+        });
+    })
+    .handler(1301, function() {
+        alertify.dismissAll();
+        scanner.expect(2, function(data) {
+            alertify.notify(data[0] + "/" + data[1] + " answered!", "success", 1);
+        });
     });
 
     window.scanner = scanner;
@@ -96,6 +137,10 @@ $(document).ready(function() {
         $("#chatDiv").css({width: 0});
         $("#roomplayersDiv").css({width: "30%", left: "0", height: "70%"});
         $("#settingSetDiv").css({width: "70%", height: "70%"});
+        $(".ansButton").css({width: "90%", height: "15%"});
+    }
+    else {
+        $(".ansButton").after("<br/>");
     }
     var opts = "";
     for (var x in categories) if (categories.hasOwnProperty(x)) {
@@ -274,10 +319,36 @@ $(document).ready(function() {
         scanner.send(215);
     });
 
-    $("#btnStartRoom").click(function() {
+    $("#btnStartGame").click(function() {
         scanner.send(217);
     });
+
+    $(".btnAnswer").click(function() {
+        let dis = $(this);
+        scanner.send(219).send($(this).attr("answer"))
+        .callback(1200, function() {
+            dis.css({backgroundColor: "green"});
+            $("#soundCorrect").get(0).play();
+            scanner.expect(1, function(d) {
+                score = d[0];
+            });
+        })
+        .callback(1201, function() {
+            dis.css({backgroundColor: "red"});
+            $("#soundWrong").get(0).play();
+        });
+    });
 });
+
+String.prototype.htmlDecode = function () {
+  return this.replace(/&amp;/g, '&')
+            .replace(/&quot;/g, '"')
+            .replace(/\&([0-9]+?)\;/g, function(x) { return String.fromCharCode(parseInt(x.substring(1, 3))); });
+}
+
+function htmlEncode(value) {
+  return $('<textarea/>').text(value).html();
+}
 
 var categories = {
     0: "Any category",

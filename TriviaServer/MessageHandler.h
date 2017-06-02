@@ -8,6 +8,9 @@ class GameRoom;
 #include "Message.h"
 class Message;
 
+#include "TimedTask.h"
+class TimedTask;
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -21,6 +24,7 @@ public:
 	vector<User*> users;
 	vector<GameRoom*> gamerooms;
 	queue<Message> messageQueue;
+	vector<TimedTask> tasks;
 	mutex m;
 
 	static MessageHandler* instance()

@@ -25,9 +25,11 @@
     <ClCompile Include="MessageHandler.cpp" />
     <ClCompile Include="Question.cpp" />
     <ClCompile Include="Scanner.cpp" />
+    <ClCompile Include="Score.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="sqlite3.c" />
+    <ClCompile Include="TimedTask.cpp" />
     <ClCompile Include="User.cpp" />
     <ClCompile Include="WSAInitializer.cpp" />
   </ItemGroup>
@@ -38,8 +40,10 @@
     <ClInclude Include="MessageHandler.h" />
     <ClInclude Include="Question.h" />
     <ClInclude Include="Scanner.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="sqlite3.h" />
+    <ClInclude Include="TimedTask.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="WSAInitializer.h" />
   </ItemGroup>

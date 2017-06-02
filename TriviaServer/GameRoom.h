@@ -3,8 +3,12 @@
 #include "User.h"
 class User;
 
+#include "Question.h"
+class Question;
+
 #include <iostream>
 #include <vector>
+#include <map>
 #include <string>
 #include <algorithm>
 using namespace std;
@@ -31,9 +35,11 @@ public:
 	int currentRound;
 	int maxRounds;
 	string difficulty;
-	int timePerQuestion;
+	int timePerQuestion; 
 	int Id;
-
+	int answerers;
+	vector<Question> questions;
+	map<string,int> formers;
 	static const int
 		WAITING = 0,
 		STARTING_GAME = 1,

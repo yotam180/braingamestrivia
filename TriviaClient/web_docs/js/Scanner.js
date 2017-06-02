@@ -10,7 +10,11 @@ function Scanner(ip, port) {
     var loadiv, readiv;
 
     socket.onmessage = function(m) {
-        var data = parseInt(m.data) || m.data;
+        var data = isNaN(m.data) ? m.data : parseInt(m.data);
+        console.log("Got packet: " + data);
+        if (data == NaN) {
+            debugger;
+        }
         //console.log("Scanner received " + data + ", queue length " + messageQueue.length);
         if (immediateHandler) {
             //console.log(data + " is going to be queued.");

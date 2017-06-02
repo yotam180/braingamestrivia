@@ -32,6 +32,7 @@ public:
 	{
 		return _instance;
 	}
+
 	int signup(string username, string password, string email);
 
 	int login(string username, string password, User** u);

@@ -29,6 +29,16 @@ GameRoom * User::getRoom()
 	return gameroom;
 }
 
+void User::incScore(int inc)
+{
+	this->score += inc;
+}
+
+int User::getScore()
+{
+	return this->score;
+}
+
 void User::clearRoom()
 {
 	gameroom->playerLeave(this);

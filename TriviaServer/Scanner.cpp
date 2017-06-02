@@ -53,17 +53,24 @@ void Scanner::writeInt(int val)
 	writeStr(std::to_string(val));
 }
 
+void SEND(SOCKET soc, const char arr[], int size)
+{
+	__try
+	{
+		send(soc, arr, size, 0);
+	}
+	__except (
+		GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION
+		? EXCEPTION_EXECUTE_HANDLER
+		: EXCEPTION_CONTINUE_SEARCH) {
+		std::cerr << "OMG!\n";
+	}
+}
+
 void Scanner::writeStr(string val)
 {
-	try
-	{
-		send(soc, val.c_str(), val.size(), 0);
-		send(soc, "##", 2, 0);
-	}
-	catch (...)
-	{
-		cout << "Error while writing to client" << endl;
-	}
+	SEND(soc, val.c_str(), val.size());
+	SEND(soc, "##", 2);	
 }
 
 void Scanner::block()

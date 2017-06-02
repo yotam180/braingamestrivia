@@ -84,16 +84,16 @@ void Server::accept()
 void Server::clientHandler(SOCKET clientSocket)
 {
 	int res_code = 1; 
-	Scanner scanner(clientSocket);
+	Scanner *scanner = new Scanner(clientSocket);
 	while (res_code > 0)
 	{
 		try
 		{
-			scanner.wait();
-			int code = scanner.nextInt();
-			scanner.block();
+			scanner->wait();
+			int code = scanner->nextInt();
+			scanner->block();
 			unique_lock<mutex> l(MessageHandler::instance()->getQueueLocker());
-			MessageHandler::instance()->messageQueue.push(Message(code, &scanner));
+			MessageHandler::instance()->messageQueue.push(Message(code, scanner));
 			l.unlock();
 			if (code == 299)
 			{
@@ -106,7 +106,6 @@ void Server::clientHandler(SOCKET clientSocket)
 		}
 	}
 	cout << "A socket has ended or forced to end." << endl;
-	scanner.close();
 }
 
 

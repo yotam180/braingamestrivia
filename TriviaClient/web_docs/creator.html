@@ -1,0 +1,79 @@
+<html>
+<head>
+	<title>מחולל המסיבוט</title>
+	<link rel="StyleSheet" type="text/css" href="style/style.css"></link>
+	<script src="js/jquery.js"></script>
+	<script>
+		var RES = [];
+		$(document).ready(function() {
+			$("#submitBtn").click(function() {
+				var word = $("#txtWord").val();
+				var building = $("#building").val() ? $("#building").val().split(",") : [];
+				var gizra = [];
+				if ($("#shlemim").is(':checked')) gizra.push("שלמים");
+				if ($("#groniyot").is(':checked')) gizra.push("גרוניות");
+				if ($("#merubaim").is(':checked')) gizra.push("מרובעים");
+				if ($("#hafan").is(':checked')) gizra.push("חפנ");
+				if ($("#hafiz").is(':checked')) { gizra.push("חפיצ"); gizra.push("חפיץ"); }
+				if ($("#nefyu").is(':checked')) gizra.push("נפיו");
+				if ($("#nayu").is(':checked')) { gizra.push("עיו"); gizra.push("נעיו"); }
+				if ($("#nafa").is(':checked')) gizra.push("נפא");
+				if ($("#nala").is(':checked')) gizra.push("נלא");
+				if ($("#nalya").is(':checked')) { gizra.push("נליה"); gizra.push("נלי/ה"); }
+				if ($("#ayay").is(':checked')) gizra.push("עע");
+				var root = [$("#root").val()];
+				var r = {
+					word: word,
+					binyan: building,
+					gzarot: gizra,
+					shoresh: root
+				};
+				RES.push(r);
+				$("#result").val(JSON.stringify(RES));
+				$("#txtWord").val("");
+				$("#root").val("");
+				$("input[type='checkbox']").prop("checked", false);
+			});
+		});
+	</script>
+</head>
+<body style="direction: rtl; text-align: right; padding: 20px;">
+המשפט - דאג להכניס את המילה בתוך כוכביות *מילה* ולנקד אותה כראוי:
+<br/>
+<input type="text" id="txtWord" style="width: 50%;" class="bigText" />
+<br/>
+בניין:
+<br/>
+<select id="building" class="bigText">
+<option></option>
+<option>פעל,קל</option>
+<option>נפעל</option>
+<option>הפעיל</option>
+<option>הופעל</option>
+<option>פועל</option>
+<option>פיעל</option>
+<option>התפעל</option>
+</select>
+<br/>
+גזרה:
+<br/>
+<input type="checkbox" id="shlemim" />שלמים<br/>
+<input type="checkbox" id="groniyot" />גרוניות (לא לסמן ביחד עם גזרות אחרות שהן לא שלמים)<br/>
+<input type="checkbox" id="merubaim" />מרובעים<br/>
+<input type="checkbox" id="hafan" />חפ"נ<br/>
+<input type="checkbox" id="hafiz" />חפי"צ<br/>
+<input type="checkbox" id="nefyu" />נפי"ו<br/>
+<input type="checkbox" id="nayu" />נעי"ו<br/>
+<input type="checkbox" id="nafa" />נפ"א<br/>
+<input type="checkbox" id="nala" />נל"א<br/>
+<input type="checkbox" id="nalya" />נלי/ה<br/>
+<input type="checkbox" id="ayay" />ע"ע<br/>
+<br/>
+שורש - הפרד עם מקפים, ובמקרה של נלי/ה רשום י/ה בלה"פ. בגן כת"ם - רק ה"א:
+<input type="text" id="root" class="bigText" />
+<br/>
+<button id="submitBtn">Create!</button>
+<br/>
+<textarea id="result" style="width: 100%; height: 300px; direction: ltr; text-align: left"></textarea>
+</body>
+</html>

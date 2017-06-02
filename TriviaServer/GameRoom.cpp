@@ -23,19 +23,21 @@ GameRoom::~GameRoom()
 	{
 		users[i]->clearRoom();
 	}
+	MessageHandler::instance()->tasks.erase(remove_if(MessageHandler::instance()->tasks.begin(), MessageHandler::instance()->tasks.end(), [this](TimedTask x) -> bool { return x.param == this; }), MessageHandler::instance()->tasks.end());
 }
 
 void GameRoom::playerLeave(User* user)
 {
 	user->setRoom(nullptr);
 	cout << user->getUsername() << " has left room #" << Id << endl;
+	this->formers[user->getUsername()] = user->getScore();
 	users.erase(std::remove(users.begin(), users.end(), user), users.end());
 	broadcastDetails();
 	if (users.size() == 0)
 	{
 		cout << "Room #" << Id << " has been emptied of players. Room is deleted." << endl;
 		vector<GameRoom*>& rooms = MessageHandler::instance()->gamerooms;
-		rooms.erase(std::remove_if(rooms.begin(), rooms.end(), [this](GameRoom* r) { return r->Id == this->Id; }));
+		rooms.erase(std::remove_if(rooms.begin(), rooms.end(), [this](GameRoom* r) { return r->Id == this->Id; }), rooms.end());
 		delete this;
 	}
 }

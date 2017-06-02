@@ -13,5 +13,6 @@ struct Question
 	string difficulty;
 	string ans1, ans2, ans3, ans4;
 	int correctAnswer;
+	long long time;
 };
 
