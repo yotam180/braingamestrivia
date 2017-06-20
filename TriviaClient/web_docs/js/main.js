@@ -2,7 +2,7 @@ LoadFiles();
 
 $(document).ready(function() {
     var score = 0;
-    var game = {
+    window.game = {
         players: 0,
         rounds: 0,
         round_time: 0,
@@ -12,7 +12,10 @@ $(document).ready(function() {
     var scanner = new Scanner("<@echo(_ip);@>", 54453).loading($("#loadingDiv")).ready($("#loginDiv"))
     .handler(106, function() {
         scanner.expect(1, function(data) {
-            if (!data[0]) return;
+            if (!data[0]) {
+                 $("#roomlistDiv").html("");
+                return;
+            }
             var PACKET_SIZE = 10;
             scanner.expect(data[0] * PACKET_SIZE, function(rooms) {
                 var tbl = "<table style='width: 100%; table-layout: fixed;' border='0'>";
@@ -97,10 +100,15 @@ $(document).ready(function() {
     .handler(1170, function() {
         $("#roomDiv").fadeOut();
         $("#gameDiv").fadeIn();
+        $("#questionDiv").hide();
+        $("#answersDiv").hide();
         score = 0;
     })
     .handler(118, function() {
         $("#questionDiv").show();
+        $("#answersDiv").hide();
+        $("#pbTime").css({width: "100%"});
+        $("#pbTime").animate({width: "0%"}, game.round_time * 1000);
         scanner.expect(5, function(data) {
             console.log(data);
             $(".btnAnswer[answer='1']").css({backgroundColor: "white"}).text(data[1].toString().htmlDecode());
@@ -111,12 +119,59 @@ $(document).ready(function() {
         });
     })
     .handler(130, function() {
-        scanner.expect(1, function(d) {
+        scanner.expect(4, function(d) {
             $(".btnAnswer[answer='" + d[0] + "']").css({backgroundColor: "green"});
-            setTimeout(function() {
-                $("#questionDiv").hide();
-                $("#answersDiv").fadeIn();
-            }, 1000);
+            scanner.expect(d[3] * 2, function(u) {
+                setTimeout(function() {
+                    $("#questionDiv").hide();
+                    $("#answersDiv").fadeIn();
+                    $("#spnPlace").text(d[2]);
+                    $("#spnPts").text(d[1]);
+                    var tbl = "<table style='table-layout: fixed; width: 100%; font-size: larger;' border='2'>";
+                    var p = [];
+                    for (var i = 0; i < u.length; i+=2) {
+                        p.push({"name": u[i], "score": u[i + 1]});
+                    }
+                    p.sort((a, b) => b.score - a.score);
+                    for (var i = 0; i < p.length; i++) {
+                        tbl += "<tr><td style='text-align: center;'>%s</td><td style='text-align: center;'>%s</td></tr>"
+                                .replace("%s", p[i].name).replace("%s", p[i].score);
+                    }
+                    tbl += "</table>";
+                    $("#divList").html(tbl);
+                }, 1000);
+            });
+        });
+    })
+    .handler(121, function() {
+        scanner.expect(3, function(d) {
+            scanner.expect(d[2] * 2, function(u) {
+                setTimeout(function() {
+                    $("#questionDiv").hide();
+                    $("#answersDiv").fadeIn();
+                    $("#spnPlace").text(d[1]);
+                    $("#spnPts").text(d[0]);
+                    var tbl = "<table style='table-layout: fixed; width: 100%; font-size: larger;' border='2'>";
+                    var p = [];
+                    for (var i = 0; i < u.length; i+=2) {
+                        p.push({"name": u[i], "score": u[i + 1]});
+                    }
+                    p.sort((a, b) => b.score - a.score);
+                    for (var i = 0; i < p.length; i++) {
+                        tbl += "<tr><td style='text-align: center;'>%s</td><td style='text-align: center;'>%s</td></tr>"
+                                .replace("%s", p[i].name).replace("%s", p[i].score);
+                    }
+                    tbl += "</table>";
+                    $("#divList").html(tbl);
+                    $("#gameDiv").fireworks();
+                    alertify.alert("You're #" + d[1] + "!", "You finished the game with a score of " + d[0] + "!");
+                    setTimeout(function() {
+                        $("#gameDiv").fireworks("destroy");
+                        $("#gameDiv").hide();
+                        $("#roomDiv").show();
+                    }, 10000);
+                }, 1000);
+            });
         });
     })
     .handler(1301, function() {

@@ -38,7 +38,8 @@ public:
 	int timePerQuestion; 
 	int Id;
 	int answerers;
-	vector<Question> questions;
+    vector<Question> questions;
+	//Question question;
 	map<string,int> formers;
 	static const int
 		WAITING = 0,

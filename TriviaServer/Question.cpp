@@ -6,13 +6,52 @@
 
 Question::Question(string question, string correct, string incorrect1, string incorrect2, string incorrect3, int category, string difficulty)
 {
-	string incorrects[3] = { incorrect1, incorrect2, incorrect3 };
-	std::random_shuffle(incorrects, incorrects + 2);
+	vector<string> incorrects = { incorrect1, incorrect2, incorrect3 };
 	correctAnswer = rand() % 4 + 1;
+	int num;
 	this->question = question;
 	this->category = category;
 	this->difficulty = difficulty;
-	if (correctAnswer == 1) // GODAMMIT. I was really tired while writing this code. Have merci on me.
+	switch (correctAnswer)
+	{
+	case 1:
+		this->ans1 = correct;
+		num = rand() % 3;
+		this->ans2 = incorrects[num];
+		incorrects.erase(incorrects.begin() + num);
+		num = rand() % 2;
+		this->ans3 = incorrects[num];
+		this->ans4 = incorrects[1 - num];
+		break;
+	case 2:
+		this->ans2 = correct;
+		num = rand() % 3;
+		this->ans1 = incorrects[num];
+		incorrects.erase(incorrects.begin() + num);
+		num = rand() % 2;
+		this->ans3 = incorrects[num];
+		this->ans4 = incorrects[1 - num];
+		break;
+	case 3:
+		this->ans3 = correct;
+		num = rand() % 3;
+		this->ans2 = incorrects[num];
+		incorrects.erase(incorrects.begin() + num);
+		num = rand() % 2;
+		this->ans1 = incorrects[num];
+		this->ans4 = incorrects[1 - num];
+		break;
+	case 4:
+		this->ans4 = correct;
+		num = rand() % 3;
+		this->ans1 = incorrects[num];
+		incorrects.erase(incorrects.begin() + num);
+		num = rand() % 2;
+		this->ans2 = incorrects[num];
+		this->ans3 = incorrects[1 - num];
+		break;
+	}
+	/*if (correctAnswer == 1) // GODAMMIT. I was really tired while writing this code. Have merci on me.
 	{
 		ans1 = correct;
 		ans2 = incorrects[0];
@@ -39,7 +78,7 @@ Question::Question(string question, string correct, string incorrect1, string in
 				ans4 = correct;
 			}
 		}
-	}
+	}*/
 }
 
 Question::~Question()

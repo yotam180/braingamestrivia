@@ -29,7 +29,8 @@ var _ip = PRODUCTION ? IP : GetLocalIPAddress();
     <link rel="Stylesheet" type="text/css" href="style/style.css" />
     <link rel="icon" href="asset/Rubik-Cube.ico" type="image/x-icon"/>
     <script src="js/jquery.js"></script>
-    <script src="js/Scanner.js"></script>
+    <script src="js/jquery.fireworks.js"></script>
+    <script src="js/Scanner-min.js"></script>
     <script src="js/util.js"></script>
     <script src="js/loadify.js"></script>
     <script>
@@ -137,14 +138,20 @@ var _ip = PRODUCTION ? IP : GetLocalIPAddress();
     </div>
     <div id="gameDiv" class="full" style="display: none; text-align: center;">
         <div id="questionDiv" style="display: none;">
+        <div id="pbTime" style="display: fixed; top: 0; left: 0; height: 3%; width: 100%; background-color: deepskyblue;">
+            &nbsp;
+        </div>
         <h2 id="lblQuestion" style="color: whitesmoke">This is the question placeholder</h2>
         <button class="btnAnswer bigButton ansButton" answer="1" value="This is answer 1"></button><br/>
         <button class="btnAnswer bigButton ansButton" answer="2" value="This is answer 2"></button><br/>
         <button class="btnAnswer bigButton ansButton" answer="3" value="This is answer 3"></button><br/>
         <button class="btnAnswer bigButton ansButton" answer="4" value="This is answer 4"></button>
         </div>
-        <div id="answersDiv" style="display: none;">
-            <h1>Here will come the answers.</h1>
+        <div id="answersDiv" style="display: none; color: white;">
+            <h1>You are #<span id="spnPlace">X*X</span>, with <span id="spnPts" style="color: mediumspringgreen;">X*X</span> points!</h1>
+            <div id="divList" style="margin: auto; text-align: center;">
+
+            </div>
         </div>
     </div>
     <div id="failedConnectionDiv" style="display: none;" class="full">

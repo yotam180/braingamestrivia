@@ -5,18 +5,24 @@ c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\d
   c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\gameroom.h(7): note: see declaration of 'Question'
 c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(19): warning C4244: 'initializing': conversion from '__int64' to 'int', possible loss of data
 c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(31): warning C4018: '<': signed/unsigned mismatch
-c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(44): warning C4018: '<': signed/unsigned mismatch
-c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(62): warning C4018: '<': signed/unsigned mismatch
-c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(85): warning C4018: '<': signed/unsigned mismatch
-c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(102): warning C4018: '<': signed/unsigned mismatch
+c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(45): warning C4018: '<': signed/unsigned mismatch
+c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(63): warning C4018: '<': signed/unsigned mismatch
+c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(70): warning C4018: '<': signed/unsigned mismatch
+c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(84): warning C4018: '<': signed/unsigned mismatch
+c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(94): warning C4018: '<': signed/unsigned mismatch
 c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(123): warning C4018: '<': signed/unsigned mismatch
-c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(140): warning C4018: '<': signed/unsigned mismatch
-c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(148): warning C4018: '<': signed/unsigned mismatch
-c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(198): warning C4018: '<': signed/unsigned mismatch
-c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(248): warning C4018: '<': signed/unsigned mismatch
-c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(298): warning C4018: '>=': signed/unsigned mismatch
-c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(332): warning C4018: '<': signed/unsigned mismatch
-c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(361): warning C4018: '<': signed/unsigned mismatch
-c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(393): warning C4018: '<': signed/unsigned mismatch
+c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(141): warning C4018: '<': signed/unsigned mismatch
+c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(146): warning C4018: '<': signed/unsigned mismatch
+c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(153): warning C4018: '<': signed/unsigned mismatch
+c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(163): warning C4018: '<': signed/unsigned mismatch
+c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(191): warning C4018: '<': signed/unsigned mismatch
+c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(208): warning C4018: '<': signed/unsigned mismatch
+c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(216): warning C4018: '<': signed/unsigned mismatch
+c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(266): warning C4018: '<': signed/unsigned mismatch
+c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(316): warning C4018: '<': signed/unsigned mismatch
+c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(366): warning C4018: '>=': signed/unsigned mismatch
+c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(401): warning C4018: '<': signed/unsigned mismatch
+c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(430): warning C4018: '<': signed/unsigned mismatch
+c:\users\yotam\documents\visual studio 2017\projects\triviaserver\triviaserver\messagehandler.cpp(462): warning C4018: '<': signed/unsigned mismatch
   TriviaServer.vcxproj -> C:\Users\yotam\documents\visual studio 2017\Projects\TriviaServer\Debug\TriviaServer.exe
   TriviaServer.vcxproj -> C:\Users\yotam\documents\visual studio 2017\Projects\TriviaServer\Debug\TriviaServer.pdb (Partial PDB)

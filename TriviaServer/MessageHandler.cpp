@@ -40,6 +40,7 @@ void MessageHandler::handle()
 					r->currentRound = 0;
 					r->answerers = 0;
 					r->gamestate = GameRoom::IN_QUESTION;
+
 					r->questions[r->currentRound].time = time();
 					for (int i = 0; i < r->users.size(); i++)
 					{
@@ -64,6 +65,42 @@ void MessageHandler::handle()
 						r->users[i]->last_answer = 0;
 						r->users[i]->getScanner()->writeInt(Message::BROADCAST_QUESTION_ENDED);
 						r->users[i]->getScanner()->writeInt(r->questions[r->currentRound].correctAnswer);
+						r->users[i]->getScanner()->writeInt(r->users[i]->score);
+						int count = 1;
+						for (int j = 0; j < r->users.size(); j++)
+						{
+							if (r->users[j]->getScore() > r->users[i]->getScore())
+								count++;
+						}
+						for (std::map<string, int>::iterator it = r->formers.begin(); it != r->formers.end(); ++it)
+						{
+							if (it->second > r->users[i]->getScore())
+							{
+								count++;
+							}
+						}
+						r->users[i]->getScanner()->writeInt(count);
+						int amount = 0;
+						for (int j = 0; j < r->users.size(); j++)
+						{
+							amount++;
+						}
+						for (std::map<string, int>::iterator it = r->formers.begin(); it != r->formers.end(); ++it)
+						{
+							amount++;
+						}
+						r->users[i]->getScanner()->writeInt(amount);
+						/////////// TODO Bom send the scores of the logged-out players too
+						for (int j = 0; j < r->users.size(); j++) 
+						{
+							r->users[i]->getScanner()->writeStr(r->users[j]->getUsername());
+							r->users[i]->getScanner()->writeInt(r->users[j]->getScore());
+						}
+						for (std::map<string, int>::iterator it = r->formers.begin(); it != r->formers.end(); ++it)
+						{
+							r->users[i]->getScanner()->writeStr(it->first);
+							r->users[i]->getScanner()->writeInt(it->second);
+						}
 					}
 					if (r->currentRound < r->maxRounds - 1)
 					{
@@ -81,6 +118,7 @@ void MessageHandler::handle()
 					r->currentRound++;
 					r->answerers = 0;
 					r->gamestate = GameRoom::IN_QUESTION;
+
 					r->questions[r->currentRound].time = time();
 					for (int i = 0; i < r->users.size(); i++)
 					{
@@ -99,9 +137,39 @@ void MessageHandler::handle()
 					// What the heck should I do here?
 					room* r = (room*)task.param;
 					if (r == nullptr) goto ABORT_TASK;
+					r->gamestate = GameRoom::WAITING;
 					for (int i = 0; i < r->users.size(); i++)
 					{
 						r->users[i]->getScanner()->writeInt(Message::BROADCAST_GAME_ENDED);
+						r->users[i]->getScanner()->writeInt(r->users[i]->score);
+						int count = 1;
+						for (int j = 0; j < r->users.size(); j++)
+						{
+							if (r->users[j]->getScore() > r->users[i]->getScore())
+								count++;
+						}
+						r->users[i]->getScanner()->writeInt(count);
+						int amount = 0;
+						for (int j = 0; j < r->users.size(); j++)
+						{
+							amount++;
+						}
+						for (std::map<string, int>::iterator it = r->formers.begin(); it != r->formers.end(); ++it)
+						{
+							amount++;
+						}
+						r->users[i]->getScanner()->writeInt(amount);
+						/////////// TODO Bom send the scores of the logged-out players too
+						for (int j = 0; j < r->users.size(); j++)
+						{
+							r->users[i]->getScanner()->writeStr(r->users[j]->getUsername());
+							r->users[i]->getScanner()->writeInt(r->users[j]->getScore());
+						}
+						for (std::map<string, int>::iterator it = r->formers.begin(); it != r->formers.end(); ++it)
+						{
+							r->users[i]->getScanner()->writeStr(it->first);
+							r->users[i]->getScanner()->writeInt(it->second);
+						}
 					}
 				}
 				ABORT_TASK:
@@ -324,8 +392,9 @@ void MessageHandler::handle()
 				scanner.writeInt(Message::RESPONSE_GAMESTART_TOO_FEW_PLAYERS);
 				goto RET;
 			}
-			
 			r->questions = Database::instance()->getQuestions(r->maxRounds, r->difficulty, r->category);
+			r->maxRounds = r->questions.size();
+
 			r->gamestate = GameRoom::STARTING_GAME;
 			r->formers.clear();
 			
