@@ -13,6 +13,9 @@ class Question;
 #include <algorithm>
 using namespace std;
 
+/*
+The GameRoom class defines a game room, stores the player list, the state, rankings, etc.
+*/
 class GameRoom
 {
 public:

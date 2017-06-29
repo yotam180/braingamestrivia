@@ -4,6 +4,17 @@ class MessageHandler;
 
 int GameRoom::_lastroom = 0;
 
+/*
+Constructs a new GameRoom object with initial parameters:
+Parameters:
+	string name - the game title (name). Does not have to be uniqe as it doesn't serve as an identifier.
+	int cat - category id of the game to be created.
+	int rounds - questions number in the game that will be played.
+	int timePerRound - time given to answer every question in the game, in seconds.
+	int maxPlayers - maximum amount of players for the room
+	string difficulty - "easy", "medium" or "hard"
+Note: These parameters can be changed later.
+*/
 GameRoom::GameRoom(string name, int cat, int rounds, int timePerRound, int maxPlayers, string difficulty)
 {
 	this->name = name;
@@ -17,6 +28,9 @@ GameRoom::GameRoom(string name, int cat, int rounds, int timePerRound, int maxPl
 	cout << "A new game room has been created: " << name << endl;
 }
 
+/*
+Deallocates a GameRoom.
+*/
 GameRoom::~GameRoom()
 {
 	for (int i = 0; i < users.size(); i++)
@@ -26,6 +40,9 @@ GameRoom::~GameRoom()
 	MessageHandler::instance()->tasks.erase(remove_if(MessageHandler::instance()->tasks.begin(), MessageHandler::instance()->tasks.end(), [this](TimedTask x) -> bool { return x.param == this; }), MessageHandler::instance()->tasks.end());
 }
 
+/*
+Removes a player from a GameRoom, updating both the GameRoom object and the User object.
+*/
 void GameRoom::playerLeave(User* user)
 {
 	user->setRoom(nullptr);
@@ -42,6 +59,9 @@ void GameRoom::playerLeave(User* user)
 	}
 }
 
+/*
+Adds a player to a GameRoom, updating both the GameRoom object and the User object.
+*/
 void GameRoom::playerJoin(User * user)
 {
 	user->setRoom(this);
@@ -49,6 +69,9 @@ void GameRoom::playerJoin(User * user)
 	broadcastDetails();
 }
 
+/*
+Closes a GameRoom.
+*/
 void GameRoom::close()
 {
 	while (users.size() > 0)
@@ -58,6 +81,9 @@ void GameRoom::close()
 	}
 }
 
+/*
+Updates all players in the room with the room details.
+*/
 void GameRoom::broadcastDetails()
 {
 	for (int i = 0; i < users.size(); i++)

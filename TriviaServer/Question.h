@@ -3,6 +3,9 @@
 #include <string>
 using namespace std;
 
+/*
+Used to define a question - with the question string, answers, category, solution and difficulty.
+*/
 struct Question
 {
 	Question() {}

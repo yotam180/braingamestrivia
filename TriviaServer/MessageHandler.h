@@ -18,6 +18,9 @@ class TimedTask;
 #include <queue>
 using namespace std;
 
+/*
+The main logic unit of the server, handling message requests by clients and responding.
+*/
 class MessageHandler
 {
 public:

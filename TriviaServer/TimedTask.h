@@ -1,5 +1,10 @@
 #pragma once
 
+/*
+Defines a timeout that occurs in the server. To not break the logic flow and cause delays everywhere,
+timeouts will be waiting in line to take action, and as timeouts wait, the MessageHandler continues to
+serve more requests.
+*/
 class TimedTask
 {
 public:

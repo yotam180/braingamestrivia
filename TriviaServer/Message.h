@@ -3,6 +3,9 @@
 #include <Windows.h>
 #include "Scanner.h"
 
+/*
+Defines a message that is received by the server.
+*/
 class Message
 {
 public:
@@ -47,9 +50,9 @@ public:
 		REQUEST_ANSWER = 219,//
 		RESPONSE_ANSWER_CORRECT = 1200, //
 		RESPONSE_ANSWER_WRONG = 1201,//
-		BROADCAST_QUESTION_STATUS = 1301,
-		BROADCAST_QUESTION_ENDED = 130,
-		BROADCAST_GAME_ENDED = 121,
+		BROADCAST_QUESTION_STATUS = 1301,//
+		BROADCAST_QUESTION_ENDED = 130,//
+		BROADCAST_GAME_ENDED = 121,//
 		REQUEST_LEAVE_GAME = 222,
 		REQUEST_USER_SCORES = 223,
 		RESPONSE_BEST_SCORES = 124,

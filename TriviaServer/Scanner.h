@@ -6,6 +6,10 @@
 
 using namespace std;
 
+/*
+A wrapper class for the native SOCKET commands, able to send and receive values to and from the socket,
+thread safe and very simple to use.
+*/
 class Scanner
 {
 public:

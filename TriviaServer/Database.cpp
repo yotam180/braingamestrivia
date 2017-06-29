@@ -3,9 +3,20 @@
 class User;
 #include "MessageHandler.h"
 class MessageHandler;
-
+#include <time.h>
+#include <chrono>
+using namespace std;
 Database* Database::_instance;
 
+/*
+This function adds a new user entry to the database.
+Parameters:
+	string username - the username of the new user
+	string password - the password of the new user
+	string email - the email of the new user
+Return value:
+	int - the message that should be returned to the client
+*/
 int Database::signup(string username, string password, string email)
 {
 	// input validation
@@ -58,6 +69,14 @@ int Database::signup(string username, string password, string email)
 	return Message::RESPONSE_SIGNUP_UNKNOWN_PROBLEM;
 }
 
+/*
+This method is used to authenticate a user using their credentials.
+Parameters:
+	string username - the username of the user
+	string password - the password of the user.
+Return value:
+	int - the message that should be returned to the client.
+*/
 int Database::login(string username, string password, User** user)
 {
 	if (username.length() < 6)
@@ -107,6 +126,24 @@ int Database::login(string username, string password, User** user)
 	return Message::RESPONSE_LOGIN_WRONG_CREDENTIALS;
 }
 
+int Database::startGame()
+{
+	stringstream sql;
+	//sql << "INSERT INTO Games (Status,StartTime) VALUES (0," <<duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count() << ");";
+	// Commented this out so there are no compiler errors
+	return 0;
+}
+
+/*
+This queries a list of questions from the database, and returns them as a vector.
+Parameters:
+	int amount - the number of questions we want to pull out of the database.
+	string difficulty - "easy" for easy questions, "medium" for medium, or "hard" for not filtering questions
+	int category - the category id of the questions.
+Return value:
+	vector<Question> - a vector of questions that were pulled of the database. If there were not enough
+	questions with the required parameters, the returned vector's length will be smaller than the amount parameter.
+*/
 vector<Question> Database::getQuestions(int amount, string difficulty, int category)
 {
 	stringstream sql;

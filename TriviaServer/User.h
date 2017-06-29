@@ -8,6 +8,9 @@ class GameRoom;
 #include "Scanner.h"
 #include "Score.h"
 
+/*
+Defines a user, holding a username and a password.
+*/
 class User
 {
 public:

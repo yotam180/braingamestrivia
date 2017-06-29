@@ -12,6 +12,9 @@ class User;
 
 using namespace std;
 
+/*
+The database is the main class used to query and update data in the DB file.
+*/
 class Database
 {
 public:
@@ -37,7 +40,7 @@ public:
 
 	int login(string username, string password, User** u);
 	vector<Question> getQuestions(int amount, string difficulty, int category);
-
+	int startGame();
 private:
 	sqlite3 *db;
 	static Database* _instance;
